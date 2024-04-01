@@ -135,6 +135,7 @@ function XModal() {
 
   return (
     <div>
+      <h1>User Details Modal</h1>
       <div className="button-container">
         <button className="open-form-button" onClick={toggleModal}>
           Open Form
@@ -146,7 +147,7 @@ function XModal() {
           <span className="close" onClick={toggleModal}>
             &times;
           </span>
-          <h2>User Details Model</h2>
+          <h2>Fill Details</h2>
           <form onSubmit={handleSubmit}>
             <label htmlFor="username">Username:</label>
             <input
