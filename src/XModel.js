@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./XModel.css";
 
 function XModal() {
@@ -9,6 +9,8 @@ function XModal() {
     dob: "",
     phone: "",
   });
+
+  const modalRef = useRef(null);
 
   const handleInputChange = (e) => {
     const { id, value } = e.target;
@@ -108,9 +110,31 @@ function XModal() {
     }
   };
 
+  const handleClickOutside = (e) => {
+    if (modalRef.current && !modalRef.current.contains(e.target)) {
+      setIsOpen(false);
+      setFormData({
+        username: "",
+        email: "",
+        dob: "",
+        phone: "",
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen]);
+
   return (
     <div>
-      <h1>User Details Modal</h1>
       <div className="button-container">
         <button className="open-form-button" onClick={toggleModal}>
           Open Form
@@ -118,11 +142,11 @@ function XModal() {
       </div>
 
       <div className={`modal ${isOpen ? "open" : ""}`}>
-        <div className="modal-content">
+        <div className="modal-content" ref={modalRef}>
           <span className="close" onClick={toggleModal}>
             &times;
           </span>
-          <h2>Fill Details</h2>
+          <h2>User Details Model</h2>
           <form onSubmit={handleSubmit}>
             <label htmlFor="username">Username:</label>
             <input
@@ -141,20 +165,21 @@ function XModal() {
               onChange={handleInputChange}
               required
             />
-            <label htmlFor="phone">Phone Number:</label>
-            <input
-              type="tel"
-              id="phone"
-              value={formData.phone}
-              onChange={handleInputChange}
-              required
-            />
 
             <label htmlFor="dob">Date of Birth:</label>
             <input
               type="date"
               id="dob"
               value={formData.dob}
+              onChange={handleInputChange}
+              required
+            />
+
+            <label htmlFor="phone">Phone Number:</label>
+            <input
+              type="tel"
+              id="phone"
+              value={formData.phone}
               onChange={handleInputChange}
               required
             />
